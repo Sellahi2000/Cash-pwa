@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>نظام المْردْ</title>
   <link rel="manifest" href="manifest.json" />
+
+  <!-- استيراد خط Tajawal من جوجل فونتس -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap" rel="stylesheet" />
+
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
@@ -12,17 +16,12 @@
       });
     }
   </script>
+
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap");
-
-    /* Reset */
-    * {
-      box-sizing: border-box;
-    }
-
+    /* قاعدة عامة */
     body {
       margin: 0;
-      font-family: "Cairo", sans-serif;
+      font-family: 'Tajawal', sans-serif;
       background: linear-gradient(135deg, #005f73, #0a9396);
       color: #edf6f9;
       min-height: 100vh;
@@ -64,6 +63,8 @@
       color: #023047;
       background-color: #f0efeb;
       text-align: center;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 500;
     }
 
     input[type="text"]:focus,
@@ -72,29 +73,31 @@
     }
 
     button {
-      width: 100%;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: 0.02em;
       padding: 14px 0;
       margin: 8px 0;
       border: none;
       border-radius: 12px;
-      font-weight: 700;
-      font-size: 1.1rem;
       cursor: pointer;
       background: linear-gradient(90deg, #00b4d8 0%, #0077b6 100%);
       color: white;
-      transition: background 0.25s ease;
+      transition: background 0.25s ease, box-shadow 0.25s ease;
       user-select: none;
+      text-transform: none;
+      box-shadow: 0 4px 6px rgba(0, 115, 182, 0.4);
     }
-
     button:hover {
       background: linear-gradient(90deg, #0077b6 0%, #00b4d8 100%);
+      box-shadow: 0 6px 10px rgba(0, 115, 182, 0.6);
     }
 
     #log {
       margin-top: 20px;
       font-size: 1.1rem;
       color: #ffd166;
-      min-height: 1.3em;
       font-weight: 600;
       min-height: 1.5em;
       word-wrap: break-word;

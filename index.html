@@ -6,7 +6,7 @@
   <title>نظام المْردْ</title>
   <link rel="manifest" href="manifest.json" />
 
-  <!-- استيراد خط Tajawal فقط -->
+  <!-- استيراد خط Tajawal -->
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap" rel="stylesheet" />
 
   <script>
@@ -18,15 +18,9 @@
   </script>
 
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap");
-
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      font-family: "Cairo", sans-serif;
+      font-family: 'Tajawal', sans-serif;
       background: linear-gradient(135deg, #005f73, #0a9396);
       color: #edf6f9;
       min-height: 100vh;
@@ -56,6 +50,12 @@
     }
 
     input[type="text"],
+    input[type="number"],
+    button {
+      font-family: 'Tajawal', sans-serif; /* الخط نفسه للمدخلات والأزرار */
+    }
+
+    input[type="text"],
     input[type="number"] {
       width: 100%;
       padding: 14px 15px;
@@ -68,6 +68,7 @@
       color: #023047;
       background-color: #f0efeb;
       text-align: center;
+      font-weight: 500;
     }
 
     input[type="text"]:focus,
@@ -76,7 +77,6 @@
     }
 
     button {
-      font-family: 'Tajawal', sans-serif;  /* تغيير الخط فقط */
       width: 100%;
       padding: 14px 0;
       margin: 8px 0;
@@ -100,7 +100,6 @@
       color: #ffd166;
       min-height: 1.3em;
       font-weight: 600;
-      min-height: 1.5em;
       word-wrap: break-word;
     }
   </style>

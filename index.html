@@ -52,7 +52,7 @@
     input[type="text"],
     input[type="number"],
     button {
-      font-family: 'Tajawal', sans-serif; /* الخط نفسه للمدخلات والأزرار */
+      font-family: 'Tajawal', sans-serif;
     }
 
     input[type="text"],
@@ -62,13 +62,14 @@
       margin-bottom: 18px;
       border: none;
       border-radius: 10px;
-      font-size: 1.1rem;
+      font-size: 1rem; /* حجم الخط مناسب ومصغر */
       outline: none;
       transition: box-shadow 0.3s ease;
       color: #023047;
       background-color: #f0efeb;
       text-align: center;
       font-weight: 500;
+      box-sizing: border-box;
     }
 
     input[type="text"]:focus,
@@ -89,6 +90,7 @@
       color: white;
       transition: background 0.25s ease;
       user-select: none;
+      box-sizing: border-box;
     }
     button:hover {
       background: linear-gradient(90deg, #0077b6 0%, #00b4d8 100%);
@@ -101,6 +103,7 @@
       min-height: 1.3em;
       font-weight: 600;
       word-wrap: break-word;
+      text-align: center;
     }
   </style>
 </head>

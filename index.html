@@ -2,12 +2,13 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>رصيد المرد</title>
+  <title>نظام المرد</title>
   <script type="module">
-    // Firebase SDKs
+    // استيراد Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+    // إعدادات Firebase الخاصة بك
     const firebaseConfig = {
       apiKey: "AIzaSyD299Z_EBo3vtsmyjgU-0Mu_nPs6ciPF2k",
       authDomain: "lemrad-35656.firebaseapp.com",
@@ -18,13 +19,14 @@
       measurementId: "G-6CE8D75QDP"
     };
 
+    // تهيئة التطبيق والقاعدة
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // دوال التعامل مع القاعدة
+    // دالة جلب الرصيد
     async function getBalance() {
       const phone = document.getElementById("phone").value;
-      const docRef = doc(db, "customers", phone);
+      const docRef = doc(db, "Clintes", phone);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
@@ -34,27 +36,28 @@
       }
     }
 
+    // دالة إضافة رصيد
     async function addBalance() {
       const phone = document.getElementById("phone").value;
       const amount = parseInt(document.getElementById("amount").value);
-      const docRef = doc(db, "customers", phone);
+      const docRef = doc(db, "Clintes", phone);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
         await updateDoc(docRef, {
           balance: docSnap.data().balance + amount
         });
-        getBalance();
       } else {
         await setDoc(docRef, { balance: amount });
-        getBalance();
       }
+      getBalance();
     }
 
+    // دالة خصم رصيد
     async function subtractBalance() {
       const phone = document.getElementById("phone").value;
       const amount = parseInt(document.getElementById("amount").value);
-      const docRef = doc(db, "customers", phone);
+      const docRef = doc(db, "Clintes", phone);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
@@ -66,6 +69,7 @@
       }
     }
 
+    // ربط الدوال بالأزرار
     window.getBalance = getBalance;
     window.addBalance = addBalance;
     window.subtractBalance = subtractBalance;
@@ -74,7 +78,7 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f7fa;
+      background: #f2f4f8;
       text-align: center;
       padding: 40px;
       color: #333;
@@ -84,27 +88,27 @@
       padding: 10px;
       margin: 10px;
       font-size: 16px;
-      border-radius: 8px;
+      border-radius: 10px;
       border: 1px solid #ccc;
     }
 
     button {
-      background-color: #008cff;
+      background-color: #0099ff;
       color: white;
       border: none;
       cursor: pointer;
     }
 
     button:hover {
-      background-color: #0066cc;
+      background-color: #007acc;
     }
 
     .container {
-      max-width: 400px;
+      max-width: 420px;
       margin: auto;
       background: white;
       padding: 30px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       border-radius: 16px;
     }
   </style>
@@ -113,11 +117,11 @@
   <div class="container">
     <h2>نظام المرد</h2>
     <input type="text" id="phone" placeholder="رقم الزبون"><br>
-    <button onclick="getBalance()">بحث عن الرصيد</button>
+    <button onclick="getBalance()">🔍 بحث عن الرصيد</button>
     <br><br>
     <input type="number" id="amount" placeholder="قيمة المرد"><br>
-    <button onclick="addBalance()">إضافة</button>
-    <button onclick="subtractBalance()">خصم</button>
+    <button onclick="addBalance()">➕ إضافة</button>
+    <button onclick="subtractBalance()">➖ خصم</button>
     <p id="balance"></p>
   </div>
 </body>

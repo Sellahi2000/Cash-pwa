@@ -1,0 +1,21 @@
+{
+  "name": "نظام الفكة المحلي",
+  "short_name": "الفكة",
+  "lang": "ar",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#0f2027",
+  "background_color": "#2c5364",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

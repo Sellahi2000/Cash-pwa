@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام الفكة المحلي</title>
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(console.error);
+      });
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #ffffff10;
+      backdrop-filter: blur(12px);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      width: 320px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #f3f3f3;
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+    input, button {
+      padding: 12px;
+      margin: 8px 0;
+      width: 100%;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+    }
+    input {
+      background: #f9f9f9;
+      color: #000;
+    }
+    button {
+      background: #00c6ff;
+      background: linear-gradient(to right, #0072ff, #00c6ff);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(to right, #005bb5, #00a0e0);
+    }
+    #log {
+      font-size: 1rem;
+      color: #ffecb3;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>💰 نظام الفكة المحلي</h2>
+    <input type="text" id="clientId" placeholder="رقم الزبون أو اسمه">
+    <input type="number" id="amount" placeholder="المبلغ (أوقية)">
+    <button onclick="addAmount()">➕ إضافة فكة</button>
+    <button onclick="deductAmount()">➖ خصم من الرصيد</button>
+    <button onclick="showBalance()">👁️ عرض الرصيد</button>
+    <div id="log"></div>
+  </div>
+  <script>
+    const data = {};
+    function addAmount() {
+      const id = document.getElementById("clientId").value.trim();
+      const amt = parseInt(document.getElementById("amount").value);
+      if (!id || isNaN(amt)) return log("⚠️ أدخل معلومات صحيحة.");
+      if (!data[id]) data[id] = 0;
+      data[id] += amt;
+      log(`✅ تمت إضافة ${amt} أوقية. الرصيد الحالي: ${data[id]}`);
+    }
+    function deductAmount() {
+      const id = document.getElementById("clientId").value.trim();
+      const amt = parseInt(document.getElementById("amount").value);
+      if (!id || isNaN(amt)) return log("⚠️ أدخل معلومات صحيحة.");
+      if (!data[id]) data[id] = 0;
+      data[id] = Math.max(data[id] - amt, 0);
+      log(`✅ تم خصم ${amt} أوقية. الرصيد الحالي: ${data[id]}`);
+    }
+    function showBalance() {
+      const id = document.getElementById("clientId").value.trim();
+      if (!id) return log("⚠️ أدخل رقم الزبون.");
+      const balance = data[id] || 0;
+      log(`📊 الرصيد الحالي للزبون ${id}: ${balance} أوقية`);
+    }
+    function log(message) {
+      document.getElementById("log").innerText = message;
+    }
+  </script>
+</body>
+</html>

@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+  <!-- Firebase SDK (compatible version) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,6 +18,55 @@
         navigator.serviceWorker.register("sw.js").catch(console.error);
       });
     }
+    <script>
+  // إعداد Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyD299Z_EBo3vtsmyjgU-0Mu_nPs6ciPF2k",
+    authDomain: "lemrad-35656.firebaseapp.com",
+    projectId: "lemrad-35656",
+    storageBucket: "lemrad-35656.firebasestorage.app",
+    messagingSenderId: "812226213205",
+    appId: "1:812226213205:web:f06cd1b2353e6e24022bdc",
+    measurementId: "G-6CE8D75QDP"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // إضافة المرد
+  function addCustomerBalance() {
+    const customerId = document.getElementById("customerId").value.trim();
+    const amount = parseFloat(document.getElementById("amount").value);
+
+    if (customerId && !isNaN(amount)) {
+      db.collection("customers").doc(customerId).set({
+        balance: firebase.firestore.FieldValue.increment(amount)
+      }, { merge: true }).then(() => {
+        alert("✅ تم إضافة المرد بنجاح.");
+      });
+    } else {
+      alert("يرجى إدخال رقم الزبون والمبلغ.");
+    }
+  }
+
+  // عرض الرصيد
+  function getCustomerBalance() {
+    const customerId = document.getElementById("customerId").value.trim();
+
+    if (customerId) {
+      db.collection("customers").doc(customerId).get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          alert(`💰 رصيد الزبون: ${data.balance || 0} أوقية`);
+        } else {
+          alert("❌ لا يوجد رصيد لهذا الزبون.");
+        }
+      });
+    } else {
+      alert("يرجى إدخال رقم الزبون.");
+    }
+  }
+</script>
   </script>
 
   <style>
@@ -48,6 +100,10 @@
       letter-spacing: 0.06em;
       color: #caf0f8;
     }
+    <input type="text" id="customerId" placeholder="رقم الزبون">
+<input type="number" id="amount" placeholder="المبلغ (أوقية)">
+<button onclick="addCustomerBalance()">إضافة المرد</button>
+<button onclick="getCustomerBalance()">عرض الرصيد</button>
 
     input[type="text"],
     input[type="number"],

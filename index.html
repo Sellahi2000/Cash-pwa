@@ -1,225 +1,124 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-  <!-- Firebase SDK (compatible version) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>نظام المْردْ</title>
-  <link rel="manifest" href="manifest.json" />
+  <meta charset="UTF-8">
+  <title>رصيد المرد</title>
+  <script type="module">
+    // Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  <!-- استيراد خط Tajawal -->
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap" rel="stylesheet" />
+    const firebaseConfig = {
+      apiKey: "AIzaSyD299Z_EBo3vtsmyjgU-0Mu_nPs6ciPF2k",
+      authDomain: "lemrad-35656.firebaseapp.com",
+      projectId: "lemrad-35656",
+      storageBucket: "lemrad-35656.appspot.com",
+      messagingSenderId: "812226213205",
+      appId: "1:812226213205:web:f06cd1b2353e6e24022bdc",
+      measurementId: "G-6CE8D75QDP"
+    };
 
-  <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("sw.js").catch(console.error);
-      });
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // دوال التعامل مع القاعدة
+    async function getBalance() {
+      const phone = document.getElementById("phone").value;
+      const docRef = doc(db, "customers", phone);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        document.getElementById("balance").innerText = "الرصيد: " + docSnap.data().balance + " أوقية";
+      } else {
+        document.getElementById("balance").innerText = "الزبون غير موجود.";
+      }
     }
-    <script>
-  // إعداد Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyD299Z_EBo3vtsmyjgU-0Mu_nPs6ciPF2k",
-    authDomain: "lemrad-35656.firebaseapp.com",
-    projectId: "lemrad-35656",
-    storageBucket: "lemrad-35656.firebasestorage.app",
-    messagingSenderId: "812226213205",
-    appId: "1:812226213205:web:f06cd1b2353e6e24022bdc",
-    measurementId: "G-6CE8D75QDP"
-  };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+    async function addBalance() {
+      const phone = document.getElementById("phone").value;
+      const amount = parseInt(document.getElementById("amount").value);
+      const docRef = doc(db, "customers", phone);
+      const docSnap = await getDoc(docRef);
 
-  // إضافة المرد
-  function addCustomerBalance() {
-    const customerId = document.getElementById("customerId").value.trim();
-    const amount = parseFloat(document.getElementById("amount").value);
-
-    if (customerId && !isNaN(amount)) {
-      db.collection("customers").doc(customerId).set({
-        balance: firebase.firestore.FieldValue.increment(amount)
-      }, { merge: true }).then(() => {
-        alert("✅ تم إضافة المرد بنجاح.");
-      });
-    } else {
-      alert("يرجى إدخال رقم الزبون والمبلغ.");
+      if (docSnap.exists()) {
+        await updateDoc(docRef, {
+          balance: docSnap.data().balance + amount
+        });
+        getBalance();
+      } else {
+        await setDoc(docRef, { balance: amount });
+        getBalance();
+      }
     }
-  }
 
-  // عرض الرصيد
-  function getCustomerBalance() {
-    const customerId = document.getElementById("customerId").value.trim();
+    async function subtractBalance() {
+      const phone = document.getElementById("phone").value;
+      const amount = parseInt(document.getElementById("amount").value);
+      const docRef = doc(db, "customers", phone);
+      const docSnap = await getDoc(docRef);
 
-    if (customerId) {
-      db.collection("customers").doc(customerId).get().then((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          alert(`💰 رصيد الزبون: ${data.balance || 0} أوقية`);
-        } else {
-          alert("❌ لا يوجد رصيد لهذا الزبون.");
-        }
-      });
-    } else {
-      alert("يرجى إدخال رقم الزبون.");
+      if (docSnap.exists()) {
+        const newBalance = docSnap.data().balance - amount;
+        await updateDoc(docRef, { balance: newBalance >= 0 ? newBalance : 0 });
+        getBalance();
+      } else {
+        document.getElementById("balance").innerText = "الزبون غير موجود.";
+      }
     }
-  }
-</script>
+
+    window.getBalance = getBalance;
+    window.addBalance = addBalance;
+    window.subtractBalance = subtractBalance;
   </script>
 
   <style>
     body {
-      margin: 0;
-      font-family: 'Tajawal', sans-serif;
-      background: linear-gradient(135deg, #005f73, #0a9396);
-      color: #edf6f9;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 15px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      text-align: center;
+      padding: 40px;
+      color: #333;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #008cff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0066cc;
     }
 
     .container {
-      background: rgba(255 255 255 / 0.1);
-      backdrop-filter: blur(12px);
-      border-radius: 18px;
-      box-shadow: 0 8px 20px rgba(0 0 0 / 0.3);
-      padding: 30px 25px;
-      max-width: 360px;
-      width: 100%;
-      text-align: center;
-    }
-
-    h2 {
-      margin-bottom: 25px;
-      font-weight: 700;
-      font-size: 1.8rem;
-      letter-spacing: 0.06em;
-      color: #caf0f8;
-    }
-    <input type="text" id="customerId" placeholder="رقم الزبون">
-<input type="number" id="amount" placeholder="المبلغ (أوقية)">
-<button onclick="addCustomerBalance()">إضافة المرد</button>
-<button onclick="getCustomerBalance()">عرض الرصيد</button>
-
-    input[type="text"],
-    input[type="number"],
-    button {
-      font-family: 'Tajawal', sans-serif;
-    }
-
-    input[type="text"],
-    input[type="number"] {
-      width: 100%;
-      padding: 14px 15px;
-      margin-bottom: 18px;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem; /* حجم الخط مناسب ومصغر */
-      outline: none;
-      transition: box-shadow 0.3s ease;
-      color: #023047;
-      background-color: #f0efeb;
-      text-align: center;
-      font-weight: 500;
-      box-sizing: border-box;
-    }
-
-    input[type="text"]:focus,
-    input[type="number"]:focus {
-      box-shadow: 0 0 10px 3px #00b4d8;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px 0;
-      margin: 8px 0;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1.1rem;
-      cursor: pointer;
-      background: linear-gradient(90deg, #00b4d8 0%, #0077b6 100%);
-      color: white;
-      transition: background 0.25s ease;
-      user-select: none;
-      box-sizing: border-box;
-    }
-    button:hover {
-      background: linear-gradient(90deg, #0077b6 0%, #00b4d8 100%);
-    }
-
-    #log {
-      margin-top: 20px;
-      font-size: 1.1rem;
-      color: #ffd166;
-      min-height: 1.3em;
-      font-weight: 600;
-      word-wrap: break-word;
-      text-align: center;
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 16px;
     }
   </style>
 </head>
 <body>
-  <div class="container" role="main" aria-label="نظام المْردْ">
-    <h2>نظام المْردْ</h2>
-    <input
-      type="text"
-      id="clientId"
-      placeholder="أدخل رقم الزبون أو اسمه"
-      aria-label="رقم الزبون أو اسمه"
-      autocomplete="off"
-    />
-    <input
-      type="number"
-      id="amount"
-      placeholder="أدخل المبلغ (أوقية)"
-      aria-label="المبلغ"
-      autocomplete="off"
-      min="0"
-    />
-    <button type="button" onclick="addAmount()" aria-label="إضافة المْردْ">
-      إضافة المْردْ
-    </button>
-    <button type="button" onclick="deductAmount()" aria-label="خصم من الرصيد">
-      خصم من الرصيد
-    </button>
-    <button type="button" onclick="showBalance()" aria-label="عرض الرصيد">
-      عرض الرصيد
-    </button>
-    <div id="log" aria-live="polite"></div>
+  <div class="container">
+    <h2>نظام المرد</h2>
+    <input type="text" id="phone" placeholder="رقم الزبون"><br>
+    <button onclick="getBalance()">بحث عن الرصيد</button>
+    <br><br>
+    <input type="number" id="amount" placeholder="قيمة المرد"><br>
+    <button onclick="addBalance()">إضافة</button>
+    <button onclick="subtractBalance()">خصم</button>
+    <p id="balance"></p>
   </div>
-
-  <script>
-    const data = {};
-    function addAmount() {
-      const id = document.getElementById("clientId").value.trim();
-      const amt = parseInt(document.getElementById("amount").value);
-      if (!id || isNaN(amt) || amt <= 0) return log("⚠️ أدخل معلومات صحيحة.");
-      if (!data[id]) data[id] = 0;
-      data[id] += amt;
-      log(`✅ تمت إضافة ${amt} أوقية. الرصيد الحالي: ${data[id]}`);
-    }
-    function deductAmount() {
-      const id = document.getElementById("clientId").value.trim();
-      const amt = parseInt(document.getElementById("amount").value);
-      if (!id || isNaN(amt) || amt <= 0) return log("⚠️ أدخل معلومات صحيحة.");
-      if (!data[id]) data[id] = 0;
-      data[id] = Math.max(data[id] - amt, 0);
-      log(`✅ تم خصم ${amt} أوقية. الرصيد الحالي: ${data[id]}`);
-    }
-    function showBalance() {
-      const id = document.getElementById("clientId").value.trim();
-      if (!id) return log("⚠️ أدخل رقم الزبون.");
-      const balance = data[id] || 0;
-      log(`📊 الرصيد الحالي للزبون ${id}: ${balance} أوقية`);
-    }
-    function log(message) {
-      document.getElementById("log").innerText = message;
-    }
-  </script>
 </body>
 </html>

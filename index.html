@@ -63,6 +63,7 @@
       transition: box-shadow 0.3s ease;
       color: #023047;
       background-color: #f0efeb;
+      text-align: center; /* جعل النص في الوسط */
     }
 
     input[type="text"]:focus,
@@ -102,7 +103,7 @@
 </head>
 <body>
   <div class="container" role="main" aria-label="نظام الفكة المحلي">
-    <h2>💰 نظام الفكة المحلي</h2>
+    <h2>نظام الفكة المحلي</h2>
     <input
       type="text"
       id="clientId"
@@ -119,13 +120,13 @@
       min="0"
     />
     <button type="button" onclick="addAmount()" aria-label="إضافة فكة">
-      ➕ إضافة فكة
+      إضافة فكة
     </button>
     <button type="button" onclick="deductAmount()" aria-label="خصم من الرصيد">
-      ➖ خصم من الرصيد
+      خصم من الرصيد
     </button>
     <button type="button" onclick="showBalance()" aria-label="عرض الرصيد">
-      👁️ عرض الرصيد
+      عرض الرصيد
     </button>
     <div id="log" aria-live="polite"></div>
   </div>
